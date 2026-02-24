@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        --radius: 0.75rem;
+        
+        /* Light mode - Teal/Emerald theme */
+        --background: 0.98 0 0;
+        --foreground: 0.15 0 0;
+        --card: 1 0 0;
+        --card-foreground: 0.15 0 0;
+        --popover: 1 0 0;
+        --popover-foreground: 0.15 0 0;
+        --primary: 0.60 0.16 165;
+        --primary-foreground: 0.98 0 0;
+        --secondary: 0.96 0.02 165;
+        --secondary-foreground: 0.20 0 0;
+        --muted: 0.96 0.02 165;
+        --muted-foreground: 0.50 0 0;
+        --accent: 0.94 0.04 165;
+        --accent-foreground: 0.20 0 0;
+        --destructive: 0.60 0.22 25;
+        --destructive-foreground: 0.98 0 0;
+        --border: 0.92 0.02 165;
+        --input: 0.92 0.02 165;
+        --ring: 0.60 0.16 165;
+        
+        /* Chart colors - Income (greens) and Expenses (reds/oranges) */
+        --chart-1: 0.65 0.18 160;
+        --chart-2: 0.60 0.16 165;
+        --chart-3: 0.55 0.14 170;
+        --chart-4: 0.60 0.22 25;
+        --chart-5: 0.65 0.20 30;
+    }
+
+    .dark {
+        --background: 0.15 0 0;
+        --foreground: 0.98 0 0;
+        --card: 0.20 0 0;
+        --card-foreground: 0.98 0 0;
+        --popover: 0.18 0 0;
+        --popover-foreground: 0.98 0 0;
+        --primary: 0.65 0.18 160;
+        --primary-foreground: 0.15 0 0;
+        --secondary: 0.25 0.02 165;
+        --secondary-foreground: 0.98 0 0;
+        --muted: 0.25 0.02 165;
+        --muted-foreground: 0.65 0 0;
+        --accent: 0.30 0.04 165;
+        --accent-foreground: 0.98 0 0;
+        --destructive: 0.65 0.20 25;
+        --destructive-foreground: 0.98 0 0;
+        --border: 0.30 0.02 165;
+        --input: 0.30 0.02 165;
+        --ring: 0.65 0.18 160;
+        
+        --chart-1: 0.65 0.18 160;
+        --chart-2: 0.60 0.16 165;
+        --chart-3: 0.55 0.14 170;
+        --chart-4: 0.60 0.22 25;
+        --chart-5: 0.65 0.20 30;
+    }
+
+    * {
+        @apply border-border;
+    }
+    
+    body {
+        @apply bg-background text-foreground;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Outfit', 'Inter', sans-serif;
+    }
+}
+
+@layer utilities {
+    .text-balance {
+        text-wrap: balance;
+    }
+}
+
+/* Custom progress bar colors */
+.progress-emerald [data-state="complete"] {
+    background-color: oklch(0.65 0.18 160);
+}
+
+.progress-yellow [data-state="complete"] {
+    background-color: oklch(0.75 0.15 85);
+}
+
+.progress-orange [data-state="complete"] {
+    background-color: oklch(0.70 0.18 45);
+}
+
+.progress-red [data-state="complete"] {
+    background-color: oklch(0.60 0.22 25);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: oklch(var(--muted));
+}
+
+::-webkit-scrollbar-thumb {
+    background: oklch(var(--muted-foreground) / 0.3);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: oklch(var(--muted-foreground) / 0.5);
+}
+
+/* Smooth transitions */
+* {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}

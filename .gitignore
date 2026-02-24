@@ -1,0 +1,10 @@
+all_files_summary.json
+build-request.json
+feature_evidence.json
+frontend-file-summaries.txt
+project_state.json
+spec_vs_diff_report.json
+coverage.json
+build.sh
+spec.md
+build-template
