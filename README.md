@@ -1,6 +1,6 @@
 # 💰 MoneyFlow
 
-MoneyFlow is a modern full-stack personal finance management platform built with **React, TypeScript, Motoko (ICP backend), MongoDB, and JWT authentication**.
+MoneyFlow is a modern full-stack personal finance management platform built with **React, TypeScript, Motoko (ICP backend)**.
 
 It allows users to track income and expenses, manage budgets, automate recurring transactions, visualize financial data, and monitor financial health — all in a secure, responsive interface.
 
