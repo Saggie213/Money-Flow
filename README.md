@@ -78,5 +78,3 @@ It allows users to track income and expenses, manage budgets, automate recurring
 - Migration support for schema upgrades
 
 ---
-
-## 📁 Project Structure
