@@ -1,0 +1,116 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Implement recurring transactions with smart notifications - Frontend",
+  "requirements": [
+    {
+      "id": "REQ-25",
+      "summary": "Build recurring transactions management page with list view showing all recurring transactions with edit, delete, and toggle actions",
+      "acceptanceCriteria": [
+        "Page displays all recurring transactions for the current user",
+        "Each entry shows transaction type, category, amount, and frequency",
+        "Shows next due date for each active recurring transaction",
+        "Visual indicator distinguishes active from inactive recurring transactions",
+        "Edit button opens modal to modify recurring transaction",
+        "Delete button removes recurring transaction with confirmation",
+        "Toggle button activates or deactivates recurring transaction"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/RecurringTransactionsPage.tsx",
+          "operation": "modify",
+          "description": "Replace placeholder with full recurring transactions management page displaying a list of recurring transactions fetched via useRecurringTransactions hook. Show type (income/expense) with color coding, category with icon, amount formatted as currency, frequency label, calculated next due date, and active/inactive status indicator. Include action buttons for edit (opens modal), delete (with confirmation dialog), and toggle active status. Display empty state when no recurring transactions exist with a button to create the first one."
+        }
+      ]
+    },
+    {
+      "id": "REQ-26",
+      "summary": "Create add/edit recurring transaction modal with comprehensive form fields for all recurring transaction properties",
+      "acceptanceCriteria": [
+        "Modal allows creating new recurring transactions",
+        "Modal pre-fills fields when editing existing recurring transaction",
+        "Type selector switches between income and expense",
+        "Category dropdown shows appropriate categories based on type",
+        "Frequency dropdown offers daily, weekly, monthly, yearly options",
+        "Start date picker defaults to today",
+        "End date is optional with checkbox to enable/disable",
+        "Form validation ensures all required fields are filled"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/RecurringTransactionModal.tsx",
+          "operation": "create",
+          "description": "Create modal component following the existing pattern from AddTransactionModal.tsx and EditTransactionModal.tsx. Include transaction type selector (income/expense), dynamic category dropdown fetched using useIncomeCategories and useExpenseCategories hooks based on selected type, amount input, description textarea, frequency dropdown (daily/weekly/monthly/yearly), start date picker defaulting to today, optional end date with checkbox toggle, and save button. When editing, pre-fill all fields from the passed recurring transaction. Use useAddRecurringTransaction or useUpdateRecurringTransaction hooks for submission. Include form validation for required fields."
+        },
+        {
+          "path": "frontend/src/pages/RecurringTransactionsPage.tsx",
+          "operation": "modify",
+          "description": "Import and integrate RecurringTransactionModal component with state management for modal visibility and selected recurring transaction for editing. Add 'Add Recurring Transaction' button in page header that opens the modal in create mode. Pass edit callback to list items that opens modal in edit mode with the selected recurring transaction."
+        }
+      ]
+    },
+    {
+      "id": "REQ-27",
+      "summary": "Implement smart notification system for significant income, expense, and low balance events using toast notifications",
+      "acceptanceCriteria": [
+        "Toast notification appears when income transaction exceeds 10,000 rupees with message showing the amount added",
+        "Toast notification appears when expense transaction exceeds 5,000 rupees with message showing the amount spent",
+        "Toast notification appears when current balance drops below 1,000 rupees with warning message",
+        "Notifications are visually distinct using appropriate colors (green for income, red for expenses, yellow for low balance)",
+        "Notifications auto-dismiss after a few seconds",
+        "Notifications stack properly when multiple occur simultaneously"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useTransactionNotifications.ts",
+          "operation": "create",
+          "description": "Create custom hook following the pattern from useBudgetNotifications.ts that monitors transactions and current balance. On transaction addition, check if income exceeds 10,000 rupees (trigger green success toast with message '₹X added to income'), if expense exceeds 5,000 rupees (trigger red warning toast with message '₹X expense recorded'), and if current balance after transaction falls below 1,000 rupees (trigger yellow destructive toast with 'Low balance warning: ₹X remaining'). Use useFinancialSummary hook to access current balance. Hook should run effect when transactions change."
+        },
+        {
+          "path": "frontend/src/components/AddTransactionModal.tsx",
+          "operation": "modify",
+          "description": "Import and call useTransactionNotifications hook to enable notifications when new transactions are added through this modal. The hook will automatically trigger appropriate notifications based on transaction amounts and resulting balance."
+        }
+      ]
+    },
+    {
+      "id": "REQ-28",
+      "summary": "Add notification when recurring transactions are automatically executed showing transaction details",
+      "acceptanceCriteria": [
+        "Toast notification displays when a recurring transaction creates a new transaction",
+        "Notification shows the transaction details (type, category, amount)",
+        "Notification indicates it was automatically added from a recurring template",
+        "User can click notification to view the created transaction"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useRecurringTransactionNotifications.ts",
+          "operation": "create",
+          "description": "Create custom hook that monitors transaction list for newly created transactions that originated from recurring templates. Compare transaction list between renders to detect new entries added since last check. For each new transaction detected after processRecurringTransactions execution, trigger an info toast notification with message 'Recurring transaction executed: [type] ₹[amount] in [category]' indicating it was automatically added. Use transaction timestamps to identify recent additions. Include action button in toast to navigate to transactions page."
+        },
+        {
+          "path": "frontend/src/pages/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Import and call useRecurringTransactionNotifications hook to enable automatic notifications when recurring transactions are processed and new transactions are created. This allows users to be informed of automatic transaction generation while viewing the dashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-29",
+      "summary": "Create React Query hooks for recurring transactions following existing patterns for data fetching and mutations",
+      "acceptanceCriteria": [
+        "All hooks follow the existing pattern in useQueries.ts",
+        "Hooks automatically invalidate relevant caches on mutations",
+        "Hooks display toast notifications on success and error",
+        "Hooks integrate with the useActor hook for backend communication"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/useQueries.ts",
+          "operation": "modify",
+          "description": "Add React Query hooks for recurring transactions following the existing pattern: useRecurringTransactions (query hook calling backend.getUserRecurringTransactionsQuery), useAddRecurringTransaction (mutation calling backend.addRecurringTransaction with parameters category, amount, description, transactionType, frequency, startDate, endDate, invalidating 'recurringTransactions' cache, showing success toast), useUpdateRecurringTransaction (mutation calling backend.updateRecurringTransaction with id and all fields, invalidating 'recurringTransactions' cache, showing success toast), useDeleteRecurringTransaction (mutation calling backend.deleteRecurringTransaction with id, invalidating 'recurringTransactions' cache, showing success toast), and useToggleRecurringTransaction (mutation calling backend.toggleRecurringTransactionActive with id, invalidating 'recurringTransactions' cache, showing success/error toast). All hooks use useActor to access backend actor and follow error handling patterns from existing transaction hooks."
+        }
+      ]
+    }
+  ]
+}
